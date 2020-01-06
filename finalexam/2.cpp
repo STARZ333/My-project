@@ -11,7 +11,7 @@ int main()
     stnum[13] = 'K';
     
     srand(time(0));
-    
+    //产生不重复随机数
     for (int i = 0; i < 13; i++)
     {
         
@@ -25,6 +25,7 @@ int main()
                 }
             }
     }
+    //对随机数处理，输出花色和数字
     for (int i = 0; i < 13; i++)
     {
         cout << flower[(arr[i]-1) / 13];
