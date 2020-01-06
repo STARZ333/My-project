@@ -10,8 +10,21 @@ int main()
     min = x / 60;
     x = x % 60;
     sec = x;
+    //输出12AM情况
+    if(hour==0)
+    {
+        cout << "AM " << hour+12;
+        if (min < 10)
+            cout  <<":0" << min ;
+        if (min >= 10)
+            cout << ":" << min ;
+        if (sec<10)
+            cout << ":0" << sec;
+        if(sec>10)
+            cout << ":" << sec;
+    }
     //输出AM情况
-    if (hour < 12)
+    if (hour < 12&&hour>0)
     {
         cout << "AM " << hour;
         if (min < 10)
@@ -23,6 +36,7 @@ int main()
         if(sec>10)
             cout << ":" << sec;
     }
+    //中午12点为PM12
     if(hour==12)
     {
         cout << "PM " << hour;
