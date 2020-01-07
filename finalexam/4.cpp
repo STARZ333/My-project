@@ -12,7 +12,7 @@ int main()
 
     for ( i = 1; i <= 10000;i++)
     {
-        number[rand() % 100 + 1] += 1;
+        number[rand() % 100 ] += 1;
         for (int k = 0; k < 100;k++)
         {
             if(number[k]==100)
