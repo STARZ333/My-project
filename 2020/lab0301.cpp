@@ -19,8 +19,8 @@ int main()
     // 以读模式打开文件
     ofstream outfile;
     ifstream infile;
-    infile.open("1.txt");
-    outfile.open("2.txt");
+    infile.open("1.in");
+    outfile.open("1.out");
 
     while (infile >> data)
     {
