@@ -7,18 +7,13 @@ int main()
     ifstream infile;
     infile.open("1.in");
     outfile.open("1.out");
-    char k;
+    char k,aft;
     while (infile.get(k))
     {
-        if (k >= 'a' && k <= 'z')
-        {
-            k = k - 32;
-            outfile << k;
-        }
-        else
-        {
-            outfile << k;
-        }
+        if(k=='\n')
+            break;
+        aft = k ^ 'a';
+        outfile << aft;
     }
     outfile << "\n";
     infile.close();
