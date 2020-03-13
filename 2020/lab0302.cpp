@@ -8,8 +8,8 @@ int main()
     ifstream infile;
     string i;
     
-    infile.open("1.txt");
-    outfile.open("2.txt");
+    infile.open("1.in");
+    outfile.open("1.out");
     while(getline(infile,i))
     {
         outfile << i.length() << i <<"\n";
