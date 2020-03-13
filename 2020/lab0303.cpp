@@ -5,13 +5,11 @@ int main()
 {
     ofstream outfile;
     ifstream infile;
-    infile.open("1.txt");
-    outfile.open("2.txt");
+    infile.open("1.in");
+    outfile.open("1.out");
     char k;
     while (infile.get(k))
     {
-        if(k=="\n")
-            break;
         if (k >= 'a' && k <= 'z')
         {
             k = k - 32;
@@ -22,4 +20,7 @@ int main()
             outfile << k;
         }
     }
+    outfile << "\n";
+    infile.close();
+    outfile.close();
 }
