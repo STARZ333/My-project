@@ -7,18 +7,15 @@ int main()
     ifstream infile;
     infile.open("1.in");
     outfile.open("1.out");
-    char password,num;
-    password = infile.get();
+    char password, num;
+    infile.get(password);
     outfile.put(password);
-    while (!infile.eof())
+    while (infile.get(num))
     {
-        num = infile.get();
-        if (num != '\n')
-        {
-            num = num ^ password;
-            outfile.put(num);
-        }
+        num = num ^ password;
+        outfile.put(num);
     }
-    infile.close();
-    outfile.close();
+
+infile.close();
+outfile.close();
 }
