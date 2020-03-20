@@ -8,8 +8,8 @@ int main()
     infile.open("1.in");
     outfile.open("1.out");
     char word,out;
-    int count[60], max, k;
-    for (int i = 0; i < 60; i++)
+    int count[65], max, k;
+    for (int i = 0; i < 65; i++)
     {
         count[i] = 0;
     }
@@ -30,7 +30,7 @@ int main()
         }
     }
     max = count[0];
-    for (int i = 0; i < 60; i++)
+    for (int i = 0; i < 65; i++)
     {
         if (count[i] > max)
         {
