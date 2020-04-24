@@ -119,7 +119,7 @@ double BankAcc::valueInUSD()
 double BankAcc::valueInEUD()
 {
     double total;
-    total = NTD / 40 + USD * 30 / 40 + EUD;
+    total = EUD + NTD / 40 + USD * 30 / 40 ;
     return total;
 }
 
