@@ -61,15 +61,8 @@ int main()
 
     while (cin >> a)
     {
-        if (a == 0)
+        if (a <= 0)
             break;
-        for (int j = 0; j < x; j++)
-        {
-            if (a == num[j])
-            {
-                cout << j + 1 << endl;
-                break;
-            }
-        }
+        cout << num[a - 1] << endl;
     }
 }
