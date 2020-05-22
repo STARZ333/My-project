@@ -18,11 +18,11 @@ void Per(int k)
     {
         for (int i = k; i < len; i++) //第i个数分别与它后面的数字交换就能得到新的排列
         {
-            swap(arr[i], arr[k]);
+            swap(arr[i], arr[k]);//len=3，分别得到abc,bac,cba
 
-            sort(arr + 1 + k, arr + len);
+            sort(arr + 1 + k, arr + len);//对除了第一个数排序，如abc，对bc排序
 
-            Per(k + 1);
+            Per(k + 1);//递归
 
             sort(arr + k, arr + len);
         }
