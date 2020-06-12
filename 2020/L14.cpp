@@ -7,7 +7,7 @@
 int inbase(int &y, int &x, int s);
 int inother(int &y, int &x, int s);
 int inedge(int &y, int &x, int s);
-int d;
+int d;//d=1,up;d=2,right;d=3,down;d=4,left
 int inedge(int &y, int &x, int s)
 {
     if (x == 0 && y == 0)
