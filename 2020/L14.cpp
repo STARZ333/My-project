@@ -108,7 +108,7 @@ int inedge(int &y, int &x, int s)
             d = 3;
             return 1;
         }
-        else if (s < 66)
+        else if (s <66)
         {
             y--;
             d = 1;
@@ -122,13 +122,15 @@ int inedge(int &y, int &x, int s)
                 d = 2;
                 return 1;
             }
-            if (x == 79)
+            else if (x == 79)
             {
                 x--;
                 d = 4;
                 return 1;
             }
         }
+        
+        return 1 ;
     }
 }
 
@@ -143,7 +145,7 @@ int inother(int &y, int &x, int s)
         if (d == 3)
             y++;
         if (d == 4)
-            y--;
+            x--;
     }
     else if (s < 90) //向顺时针方向转90°
     {
@@ -275,7 +277,7 @@ int main(void)
 
         refresh();
 
-        Sleep(500);
+        Sleep(1);
 
         erase();
     }
