@@ -12,22 +12,22 @@ using namespace std;
 class elavator
 {
 private:
-    int times;                                            //??
-    int name;                                             //????
-    int nowFloor;                                         //????
-    int xposition;                                        //??x??
-    int NumOfPeo;                                         //???????
-    int useAmount ;                                    //???
-    int targetFloor[10]; //????
-    int updown ;                                       //??????-1??,1??,0??
-    int stoptime ;                                     //????
+    int times;                                            //時間 
+    int name;                                             //電梯名稱 
+    int nowFloor;                                         //當前樓層 
+    int xposition;                                        //電梯左端x坐標 
+    int NumOfPeo;                                         //人數 
+    int useAmount ;                                    //使用量 
+    int targetFloor[10]; //電梯內各人目標樓層 
+    int updown ;                                       //運動方向-1下樓,1上樓,0停留 
+    int stoptime ;                                     //停留時間 
 public:
-    void setPosition(int x); //??????x??
+    void setPosition(int x); //設置x坐標 
     int getXposition();
-    bool full();        //??????
+    bool full();        //是否滿員 
     void setNowFloor(int x);
-    int getnowFloor();  //??????
-    int getuseAmount(); //?????
+    int getnowFloor();  //獲取當前樓層 
+    int getuseAmount(); //獲取使用量 
     void setName(int name);
     int getName();
     void setUpDown(int x);
@@ -44,14 +44,14 @@ public:
 class people
 {
 private:
-    bool move;       //?????
+    bool move;       //
     int upDown ;  //-1下，1上，0停
     int targetFloor; //目标楼层
     int nowFloor;    //当前楼层
     int passTime;
     int stayTime;   //停留时间
     int inWhichEla; // -1不在电梯,0,1,2,
-    bool state;     //????
+    bool state;     //人是否已產生 
 
 public:
     void setinWhichEla(int x);
