@@ -107,7 +107,39 @@ public:
     void elaShow(elavator ela[], people p[]);
     void elaMove(elavator ela[], people p[]);
     void initialize(elavator e[], people p[]);
+    void peoShow(elavator e[], people p[]);
 };
+void building::peoShow(elavator e[], people p[])
+{
+    int i = 0;
+    int y[13], x[13];
+    char id[2];
+    x[1] = 72;
+    y[1]=24;
+    for (int i = 2; i < 13;i++)
+    {
+        x[i] = 4;
+        y[i] = 26- 2 * i;
+    }
+        while (i < 150)
+        {
+            if (p[i].getState() == 1 && p[i].getInWhichEla() == -1 && p[i].getNowFloor() == 1)
+            {
+                move(y[1], x[1]);
+                itoa(p[i].getTargetFloor(), id, 10);
+                waddstr(stdscr, id);
+                x[1] += 3;
+            }
+            else if (p[i].getState() == 1 && p[i].getInWhichEla() == -1 && p[i].getNowFloor() != 1)
+            {
+                move(y[p[i].getNowFloor()],x[p[i].getNowFloor()]);
+                itoa(p[i].getTargetFloor(), id, 10);
+                waddstr(stdscr, id);
+                x[p[i].getNowFloor()] += 3;
+            }
+            i++;
+        }
+}
 void building::initialize(elavator e[], people p[])
 {
     for (int i = 0; i < 12; i++)
@@ -537,6 +569,8 @@ int main()
         b.moveIn(e, p);
 
         b.moveOut(e, p);
+
+		b.peoShow(e,p);
 
         b.elaMove(e, p);
 
