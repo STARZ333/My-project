@@ -40,10 +40,11 @@ private:
     int xposition;       //電梯左端x坐標
     int NumOfPeo;        //人數
     int useAmount;       //使用量
-    int targetFloor[10]; //電梯內各人目標樓層
+    
     int updown;          //運動方向-1下樓,1上樓,0停留
     int stoptime;        //停留時間
 public:
+    int targetFloor[10]; //電梯內各人目標樓層
     void setPosition(int x); //設置x坐標
     int getXposition();
     bool full(); //是否滿員
@@ -65,23 +66,26 @@ public:
 class people
 {
 private:
-    bool move;       //
+    int ifGetTargetFloor;       //是否到达目标楼层
     int upDown;      //-1下，1上，0停
     int targetFloor; //目标楼层
     int nowFloor;    //当前楼层
-    int passTime;
-    int stayTime;   //停留时间
-    int inWhichEla; // -1不在电梯,0,1,2,
-    bool state;     //人是否已產生
+    int passTime;    //上楼已过时间
+    int stayTime;    //停留时间
+    int waitTime;    //总等待时间
+    int inWhichEla;  // -1不在电梯,0,1,2,
+    bool state;      //人是否已產生
 
 public:
     void setinWhichEla(int x);
     void settargetFloor();
+    void setTargetFloor(int x);
     int getTargetFloor();
     void setNowFloor(int x);
     void randstayTime();
+    int getStayTime();
     void setmove(bool x);
-    bool getmove();
+   
     void upOrdown(); //1up   -1 down    0 stay
     int getNowFloor();
     void setState(bool s);
@@ -91,6 +95,10 @@ public:
     int getUpDown();
     void setPassTime(int x);
     int getPassTime();
+    void setWaitTime(int x);
+    int getWaitTime();
+    void setIfGetTF(int x);
+    int getIfGetTF();
 };
 
 class building
@@ -108,37 +116,107 @@ public:
     void elaMove(elavator ela[], people p[]);
     void initialize(elavator e[], people p[]);
     void peoShow(elavator e[], people p[]);
+    void timing(elavator e[], people p[]);
 };
+void people::setTargetFloor(int x)
+{
+    targetFloor = x;
+}
+int people::getStayTime()
+{
+    return stayTime;
+}
+int people::getIfGetTF()
+{
+    return ifGetTargetFloor;
+}
+void people::setIfGetTF(int x)
+{
+    ifGetTargetFloor = x;
+}
+void people::setWaitTime(int x)
+{
+    waitTime = x;
+}
+int people::getWaitTime()
+{
+    return waitTime;
+}
+void building::timing(elavator e[], people p[])
+{
+    int i = 0;
+    int s=1;
+    while (i < 150)
+    {
+        if (p[i].getState()==true&&p[i].getInWhichEla()==-1 && p[i].getNowFloor() == 1)
+        {
+            p[i].setWaitTime(p[i].getWaitTime() + 1);
+        }
+        else if(p[i].getState()==true&&p[i].getNowFloor()!=1&&p[i].getInWhichEla()==-1)
+        {
+            p[i].setPassTime(p[i].getPassTime() + 1);
+            if(p[i].getPassTime()==p[i].getStayTime())
+            {
+                s = rand() % 100 + 1;
+                if(s<81)
+                {
+                    p[i].setTargetFloor(1);
+                    p[i].setupDown(-1);
+                }
+                else
+                {
+                    do{
+                    p[i].setTargetFloor(rand() % 11 + 2);
+                    } while (p[i].getTargetFloor() == p[i].getNowFloor());
+                    if(p[i].getTargetFloor()>p[i].getNowFloor())
+                    {
+                        p[i].setupDown(1);
+                    }
+                    else if(p[i].getTargetFloor()<p[i].getNowFloor())
+                    {
+                        p[i].setupDown(-1);
+                    }
+                    p[i].setWaitTime(p[i].getWaitTime() + 1);
+                }
+            }
+        }
+        else if(p[i].getState()==true&&p[i].getInWhichEla()==-1&&p[i].getIfGetTF()!=0&&p[i].getTargetFloor()!=p[i].getNowFloor())
+        {
+            p[i].setWaitTime(p[i].getWaitTime() + 1);
+        }
+        i++;
+    }
+}
 void building::peoShow(elavator e[], people p[])
 {
     int i = 0;
     int y[13], x[13];
     char id[2];
-    x[1] = 72;
-    y[1]=24;
-    for (int i = 2; i < 13;i++)
+    x[1] = 79;
+    y[1] = 24;
+    for (int i = 2; i < 13; i++)
     {
         x[i] = 4;
-        y[i] = 26- 2 * i;
+        y[i] = 26 - 2 * i;
     }
-        while (i < 150)
+    while (i < 150)
+    {
+        if (p[i].getState() == true && p[i].getInWhichEla() == -1 && p[i].getNowFloor() == 1)
         {
-            if (p[i].getState() == 1 && p[i].getInWhichEla() == -1 && p[i].getNowFloor() == 1)
-            {
-                move(y[1], x[1]);
-                itoa(p[i].getTargetFloor(), id, 10);
-                waddstr(stdscr, id);
-                x[1] += 3;
-            }
-            else if (p[i].getState() == 1 && p[i].getInWhichEla() == -1 && p[i].getNowFloor() != 1)
-            {
-                move(y[p[i].getNowFloor()],x[p[i].getNowFloor()]);
-                itoa(p[i].getTargetFloor(), id, 10);
-                waddstr(stdscr, id);
-                x[p[i].getNowFloor()] += 3;
-            }
-            i++;
+            move(y[1], x[1]);
+            itoa(p[i].getTargetFloor(), id, 10);
+            waddstr(stdscr, id);
+            x[1] += 3;
         }
+        else if (p[i].getState() == true && p[i].getInWhichEla() == -1 && p[i].getNowFloor() != 1)
+        {
+            move(y[p[i].getNowFloor()], x[p[i].getNowFloor()]);
+            itoa(p[i].getTargetFloor(), id, 10);
+            waddstr(stdscr, id);
+            x[p[i].getNowFloor()] += 3;
+        }
+        i++;
+    }
 }
 void building::initialize(elavator e[], people p[])
 {
@@ -155,6 +233,7 @@ void building::initialize(elavator e[], people p[])
         p[i].setPassTime(0);
         p[i].settargetFloor();
         p[i].upOrdown();
+        p[i].setWaitTime(0);
     }
     for (int j = 0; j < 3; j++)
     {
@@ -183,13 +262,17 @@ int elavator::getXposition()
 void building::elaShow(elavator ela[], people p[])
 {
     int lenth = 9;
+    char f[2];
+    
     for (int k = 0; k < 3; k++)
     {
+		
         move(ela[k].getnowFloor() * -2 + 26, ela[k].getXposition());
         for (int i = 0; i < lenth; i++)
         {
             waddstr(stdscr, "_");
         }
+        
         move(ela[k].getnowFloor() * -2 + 27, ela[k].getXposition() + lenth / 2);
         char num[2];
         itoa(ela[k].getNOP(), num, 10);
@@ -200,12 +283,12 @@ void building::elaMove(elavator ela[], people p[])
 {
     for (int i = 0; i < 3; i++)
     {
-        if (ela[i].getUpDown()==1)
+        if (ela[i].getUpDown() == 1&&ela[i].getnowFloor()!=12)
         {
             ela[i].setNowFloor(ela[i].getnowFloor() + 1);
             ela[i].setUseAmount(ela[i].getuseAmount() + ela[i].getNOP() + 3);
         }
-        else if (ela[i].getUpDown() == -1)
+        else if (ela[i].getUpDown() == -1&&ela[i].getnowFloor()!=1)
         {
             ela[i].setNowFloor(ela[i].getnowFloor() - 1);
             ela[i].setUseAmount(ela[i].getuseAmount() + ela[i].getNOP() + 3);
@@ -307,7 +390,7 @@ void building::moveIn(elavator ela[], people p[])
 
             for (int j = 0; j < 3; j++)
             {
-                if ( ela[j].full() == 0 && ela[j].getnowFloor() == 1)
+                if (ela[j].full() == 0 && ela[j].getnowFloor() == 1)
                 {
                     p[i].setinWhichEla(j);
                     ela[j].setNOP(ela[j].getNOP() + 1);
@@ -319,7 +402,7 @@ void building::moveIn(elavator ela[], people p[])
             }
         }
         //up
-        if (p[i].getState() && p[i].getInWhichEla() == -1 &&p[i].getUpDown()==1)
+        if (p[i].getState() && p[i].getInWhichEla() == -1 && p[i].getUpDown() == 1)
         {
             for (int j = 0; j < 3; j++)
             {
@@ -334,11 +417,11 @@ void building::moveIn(elavator ela[], people p[])
             }
         }
         //down
-        if (p[i].getState() && p[i].getInWhichEla() == -1 && p[i].getUpDown()==-1)
+        if (p[i].getState() && p[i].getInWhichEla() == -1 && p[i].getUpDown() == -1)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (ela[j].getnowFloor() == p[i].getNowFloor() && ela[j].full() == 0 && ela[j].getUpDown() == -1 )
+                if (ela[j].getnowFloor() == p[i].getNowFloor() && ela[j].full() == 0 && ela[j].getUpDown() == -1)
                 {
                     p[i].setinWhichEla(j);
                     ela[j].setNOP(ela[j].getNOP() + 1);
@@ -354,17 +437,32 @@ void building::moveIn(elavator ela[], people p[])
 void building::moveOut(elavator ela[], people p[])
 {
     int i = 0;
+    int name;
     while (i < 150)
     {
         if (p[i].getState() && ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor() && p[i].getInWhichEla() != -1)
         {
-            int name;
+            
             name = p[i].getInWhichEla();
             p[i].setinWhichEla(-1);
             p[i].setNowFloor(ela[name].getnowFloor());
             p[i].randstayTime();
             p[i].setPassTime(0);
+            
+            p[i].setIfGetTF(p[i].getIfGetTF()+1);
             ela[name].setNOP(ela[name].getNOP() - 1);
+            if (ela[name].getNOP() == 0)
+            {
+                ela[name].setUpDown(0);
+            }
+        }
+        if(p[i].getState()&&p[i].getTargetFloor()==1&&ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor()&& p[i].getInWhichEla() != -1)
+        {
+            name = p[i].getInWhichEla();
+            p[i].setinWhichEla(-1);
+            p[i].setNowFloor(ela[name].getnowFloor());
+            ela[name].setNOP(ela[name].getNOP() - 1);
+            p[i].setState(false);
             if (ela[name].getNOP() == 0)
             {
                 ela[name].setUpDown(0);
@@ -378,7 +476,7 @@ void building::setEmptyElaNextFloor(elavator ela[], people p[])
     int m = 15, f;
     for (int i = 0; i < 3; i++)
     {
-        if (ela[i].getNOP() == 0 && ela[i].getUpDown() == 0&&ela[i].getnowFloor()!=1)
+        if (ela[i].getNOP() == 0 && ela[i].getUpDown() == 0 && ela[i].getnowFloor() != 1)
         {
             for (int j = 0; j < 12; j++)
             {
@@ -485,15 +583,9 @@ void people::upOrdown()
         setupDown(0);
     }
 }
-bool people::getmove()
-{
-    return move;
-}
 
-void people::setmove(bool x)
-{
-    move = x;
-}
+
+
 void people::randstayTime()
 {
     stayTime = rand() % 81 + 20;
@@ -532,9 +624,9 @@ int main()
     char tt[3], pp[4];
 
     //box(stdscr, 23, 79); /*draw a box*/
-    e[0].setPosition(30);
-    e[1].setPosition(45);
-    e[2].setPosition(60);
+    e[0].setPosition(35);
+    e[1].setPosition(50);
+    e[2].setPosition(65);
     b.initialize(e, p);
 
     while (1)
@@ -550,14 +642,15 @@ int main()
 
         for (int i = nop; i < nop + num; i++)
         {
+            if(i<150)
             p[i].setState(true);
         }
+        if(nop<150)
         nop += num;
 
         move(1, 84);
         waddstr(stdscr, "nop:");
-
-        itoa(nop, pp, 10);
+        itoa(nop+1, pp, 10);
         waddstr(stdscr, pp);
 
         b.build();
@@ -570,7 +663,9 @@ int main()
 
         b.moveOut(e, p);
 
-		b.peoShow(e,p);
+        b.timing(e, p);
+
+        b.peoShow(e, p);
 
         b.elaMove(e, p);
 
@@ -578,7 +673,7 @@ int main()
 
         refresh();
 
-        Sleep(500);
+        Sleep(100);
 
         erase();
     }
