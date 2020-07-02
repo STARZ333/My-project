@@ -66,14 +66,14 @@ public:
 class people
 {
 private:
-    int ifGetTargetFloor;       //是否到达目标楼层
+    int ifGetTargetFloor;       //是否到達目標樓層
     int upDown;      //-1下，1上，0停
-    int targetFloor; //目标楼层
-    int nowFloor;    //当前楼层
-    int passTime;    //上楼已过时间
-    int stayTime;    //停留时间
-    int waitTime;    //总等待时间
-    int inWhichEla;  // -1不在电梯,0,1,2,
+    int targetFloor; //目標樓層
+    int nowFloor;    //當前樓層
+    int passTime;    //上樓已過時間
+    int stayTime;    //停留時間
+    int waitTime;    //總等待時間
+    int inWhichEla;  // -1不在電梯,0,1,2,分別對應三個電梯
     bool state;      //人是否已產生
 
 public:
@@ -108,15 +108,15 @@ private:
 
 public:
     void build();
-    void moveIn(elavator ela[], people p[]);
-    void moveOut(elavator ela[], people p[]);
-    void setEmptyElaNextFloor(elavator ela[], people p[]);
-    void receiveCall(elavator ela[], people p[]);
-    void elaShow(elavator ela[], people p[]);
-    void elaMove(elavator ela[], people p[]);
-    void initialize(elavator e[], people p[]);
-    void peoShow(elavator e[], people p[]);
-    void timing(elavator e[], people p[]);
+    void moveIn(elavator ela[], people p[]);//進電梯
+    void moveOut(elavator ela[], people p[]);//出電梯
+    void setEmptyElaNextFloor(elavator ela[], people p[]);//設置空電梯去哪裡
+    void receiveCall(elavator ela[], people p[]);//接收人按電梯的呼叫
+    void elaShow(elavator ela[], people p[]);//電梯顯示
+    void elaMove(elavator ela[], people p[]);//電梯移動
+    void initialize(elavator e[], people p[]);//初始化
+    void peoShow(elavator e[], people p[]);//顯示人
+    void timing(elavator e[], people p[]);//計時
 };
 void people::setTargetFloor(int x)
 {
