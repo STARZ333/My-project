@@ -229,7 +229,7 @@ void building::initialize(elavator e[], people p[])
     {
         p[i].setNowFloor(1);
         p[i].setinWhichEla(-1);
-        p[i].setState(0);
+        p[i].setState(false);
         p[i].setPassTime(0);
         p[i].settargetFloor();
         p[i].upOrdown();
@@ -265,8 +265,7 @@ void building::elaShow(elavator ela[], people p[])
     char f[2];
     
     for (int k = 0; k < 3; k++)
-    {
-		
+    {	
         move(ela[k].getnowFloor() * -2 + 26, ela[k].getXposition());
         for (int i = 0; i < lenth; i++)
         {
@@ -302,7 +301,7 @@ void building::receiveCall(elavator ela[], people p[])
     {
         if (p[i].getState() && p[i].getInWhichEla() == -1 && p[i].getNowFloor() != p[i].getTargetFloor())
         {
-            if (p[i].getUpDown())
+            if (p[i].getUpDown()==-1)
             {
                 if (call[p[i].getNowFloor() - 1][0] == 0)
                     call[p[i].getNowFloor() - 1][0] == 1;
@@ -440,7 +439,7 @@ void building::moveOut(elavator ela[], people p[])
     int name;
     while (i < 150)
     {
-        if (p[i].getState() && ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor() && p[i].getInWhichEla() != -1)
+        if (p[i].getState()==true && ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor() && p[i].getInWhichEla() != -1)
         {
             
             name = p[i].getInWhichEla();
@@ -456,7 +455,7 @@ void building::moveOut(elavator ela[], people p[])
                 ela[name].setUpDown(0);
             }
         }
-        if(p[i].getState()&&p[i].getTargetFloor()==1&&ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor()&& p[i].getInWhichEla() != -1)
+        if(p[i].getState()==true&&p[i].getTargetFloor()==1&&ela[p[i].getInWhichEla()].getnowFloor() == p[i].getTargetFloor()&& p[i].getInWhichEla() != -1)
         {
             name = p[i].getInWhichEla();
             p[i].setinWhichEla(-1);
@@ -476,7 +475,7 @@ void building::setEmptyElaNextFloor(elavator ela[], people p[])
     int m = 15, f;
     for (int i = 0; i < 3; i++)
     {
-        if (ela[i].getNOP() == 0 && ela[i].getUpDown() == 0 && ela[i].getnowFloor() != 1)
+        if (ela[i].getNOP() == 0 && ela[i].getUpDown() == 0 )
         {
             for (int j = 0; j < 12; j++)
             {
@@ -620,7 +619,7 @@ int main()
     building b;
     elavator e[3];
 
-    int t = 0, num, nop = 0;
+    int t = 0, num, nop = 0,tot=0;
     char tt[3], pp[4];
 
     //box(stdscr, 23, 79); /*draw a box*/
@@ -639,14 +638,17 @@ int main()
         waddstr(stdscr, tt);
 
         num = rand() % 3;
-
-        for (int i = nop; i < nop + num; i++)
+        tot = nop + num;
+        if(tot>150)
+            tot = 150;
+        for (int i = nop; i < tot; i++)
         {
-            if(i<150)
             p[i].setState(true);
         }
         if(nop<150)
         nop += num;
+        if(nop>150)
+            nop = 150;
 
         move(1, 84);
         waddstr(stdscr, "nop:");
