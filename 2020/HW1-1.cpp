@@ -3,18 +3,20 @@ using namespace std;
 int main()
 {
     int x, y; //x個字串，Y長度
-
     int j;
+    cout << "Please enter number(x) and length(y):" << endl;
     cin >> x >> y;
     char **data;
     data = new char *[x];
     for (int i = 0; i < x; i++)
     {
-        data[i] = new char[y];
+        data[i] = (char *)malloc(sizeof(char) * y);
         for (int j = 0; j < y; j++)
             data[i][j] = ' ';
     }
 
+    cout << "please enter words:" << endl;
+    //輸入字符
     for (int i = 0; i < x; i++)
     {
         j = 0;
@@ -26,24 +28,26 @@ int main()
     }
 
     //sort
+    char **a=data;
     char temp;
     for (int i = 0; i < x - 1; i++)
     {
         for (int k = 0; k < x - 1 - i; k++)
         {
-            if (data[k][0] < data[k + 1][0])
+            if (a[k][0] < a[k + 1][0])
             {
                 for (int j = 0; j < y; j++)
                 {
-                    temp = data[k][j];
-                    data[k][j] = data[k + 1][j];
-                    data[k + 1][j] = temp;
+                    temp = a[k][j];
+                    a[k][j] = a[k + 1][j];
+                    a[k + 1][j] = temp;
                 }
             }
         }
     }
 
     //out
+    cout << "Result output:" << endl;
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
@@ -52,10 +56,11 @@ int main()
         }
         cout << endl;
     }
+
     //delete
     for (int i = 0; i < x; i++)
     {
-        delete[] data[i];
+        free (data[i]);
     }
     delete[] data;
     return 0;
